@@ -1,79 +1,74 @@
 // javascript for rock, paper, scissors game for The Odin Project
 
-const human = "HUMAN";
-const computer = "COMPUTER";
-
-
-
-
-function getHumanChoice (){
-    let choice = prompt("rock, paper, or scissors");
-    //console.log("Human choice: " + choice.toLowerCase());
-    return choice.toLowerCase();   
-}
-
 function getComputerChoice () {
     const choices = ['rock', 'paper', 'scissors'];
     return choices[Math.floor(Math.random() * 3)];
 }
 
-function playRound(humanChoice, computerChoice){
+function playRound(humanChoice){
+    if (totalRounds == 0) { results.innerHTML = ""; }
+    totalRounds++;
     
-    console.log("Human choice: " + humanChoice);
-    console.log("Computer choice: " + computerChoice);
-    
-    if (humanChoice == computerChoice) {
-        console.log("It's a tie.");
-    }
-    else if ((humanChoice == "rock" && computerChoice == "scissors") || 
-             (humanChoice == "paper" && computerChoice == "rock")   ||
-             (humanChoice == "scissors" && computerChoice == "paper") 
-            ) 
-    { 
-        console.log ("You WIN! " + humanChoice + " beats " + computerChoice);
-        return human;
-    }
-    else { 
-        console.log ("You LOSE. " + computerChoice + " beats " + humanChoice);
-        return computer;
-    }
-
-}
-
-function playGame(rounds){
-    
-    let totalRounds = rounds;
-    let humanScore = 0;
-    let computerScore = 0;
-
-    //determine winner
-    let roundWinner = "";
-
-    while (rounds > 0) {
-        roundWinner = playRound(getHumanChoice(), getComputerChoice());
-        if ( roundWinner == human ) {
-            humanScore ++; 
-        } else {
-            computerScore ++;
+    if (totalRounds <= maxRounds){
+        results.innerHTML += 'Round:  ' + totalRounds + '<br>';
+        
+        let computerChoice = getComputerChoice();
+        results.innerHTML += 'Human choice: ' + humanChoice + '<br>';
+        results.innerHTML += 'Computer choice: ' + computerChoice + '<br>';
+        
+        if (humanChoice == computerChoice) {
+            results.innerHTML += "It's a tie. <br>";
         }
-        rounds--;
-    }
-    
-    //code to determine overall winner here
-    if (humanScore == computerScore) {
-        console.log ("It's a tie overall.")
-    } else if (humanScore > computerScore){
-        console.log ("YOU are the overall WINNER!! You won " + humanScore + " of " + totalRounds + "!");
-    } else {
-        console.log("You LOST overall with only " + humanScore + " of " + totalRounds + ".");
+        else if ((humanChoice == "rock" && computerChoice == "scissors") || 
+                (humanChoice == "paper" && computerChoice == "rock")   ||
+                (humanChoice == "scissors" && computerChoice == "paper") 
+                ) 
+        { 
+            results.innerHTML += "You WIN! " + humanChoice + " beats " + computerChoice + "<br>";
+            humanScore++;
+        }
+        else { 
+            results.innerHTML += "You LOSE. " + computerChoice + " beats " + humanChoice + "<br>";
+            computerScore++;
+        }   
+
+
+    } 
+    if (totalRounds == maxRounds) {
+            //display results after 5 rounds
+            if (humanScore == computerScore) {
+                results.innerHTML += "It's a TIE overall. <br>";
+            } else if (humanScore > computerScore){
+                results.innerHTML += "YOU are the overall WINNER!! You won " + humanScore + " of " + maxRounds + "! <br>";
+            } else {
+                results.innerHTML += "You LOST overall with only " + humanScore + " of " + maxRounds + ". <br> ";
+            }
+            //clear counts
+            totalRounds = 0; 
+            humanScore = 0;
+            computerScore = 0;
     }
     
 
 }
 
-let number = 5;
-playGame(number); //argument is # of rounds
-//playRound(getHumanChoice(), getComputerChoice());
+// play game
+
+let maxRounds = 5;
+let totalRounds = 0;
+let humanScore = 0;
+let computerScore = 0;
+let results = document.querySelector("#results");
+
+let rock = document.querySelector('#rock');
+rock.addEventListener('click', () => playRound('rock'));
+
+let paper = document.querySelector('#paper');
+paper.addEventListener('click', () => playRound('paper'));
+
+let scissors = document.querySelector('#scissors');
+scissors.addEventListener('click', () => playRound('scissors'));
+
 
 
 
